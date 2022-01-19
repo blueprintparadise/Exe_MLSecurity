@@ -42,8 +42,8 @@ app = Flask(__name__)
 # Using "Facenet" and "Mediapipe" recommended
 model_name = 'Facenet'
 
-db_path = r"images"
-detector_backend = 'opencv'
+db_path = r"Face_Recog/images"
+detector_backend = 'mediapipe'
 ''' Options-'opencv',
          'ssd' ,
          'dlib',
