@@ -33,7 +33,7 @@ from Face_Recog import  Liveness_Blinking
 Blink_time = 30
 name_list = []
 from urllib3.exceptions import InsecureRequestWarning
-mydb = mysql.connector.connect(host="43.231.127.150",port = "3306", user="usha-jagadambe", passwd="Gais@2020$usha-jagadambe", database="securitydb",
+mydb = mysql.connector.connect(host="43.231.124.114",port = "3306", user="parag", passwd="parag", database="securitydb",
                                            auth_plugin='mysql_native_password')
 
 # Suppress only the single warning from urllib3 needed.
@@ -52,10 +52,11 @@ def get_token():
     query = "select token from tb_user order by id DESC limit 1;"
     mycursor.execute(query)
     row = mycursor.fetchone()
-    tok = "".join(row)
+    #tok = "".join(row)
+    tok  = "232"
     mycursor.close()
     mydb.commit()
-    print(tok)
+    #print(tok)
     return  str(tok)
 
 def convert(date_time):
@@ -157,6 +158,7 @@ def analysis(db_path, df, model_name='Facenet', detector_backend='mediapipe', di
         if freeze == False:
             # faces stores list of detected_face and region pair
             faces = FaceDetector.detect_faces(face_detector, detector_backend, img, align=True)
+
             #print(len(faces))
             Listing(len(faces))
 
@@ -235,6 +237,7 @@ def analysis(db_path, df, model_name='Facenet', detector_backend='mediapipe', di
                             best_distance = candidate['distance']
                             values_ = candidate[['employee', 'distance']].values
                             name = employee_name
+                            print(name)
                             Listing(name)
                             #print("--------------------------------------------------------------")
                             if best_distance <= threshold - Threshold_setter:
