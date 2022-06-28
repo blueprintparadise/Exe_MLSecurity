@@ -8,7 +8,7 @@ from flask import Response
 from flask import Flask
 from flask import render_template
 import threading
-# Fancy Progress Bars
+#  Fancy Progress Bars
 import cv2
 from tqdm import tqdm
 
