@@ -171,8 +171,11 @@ def embed(model_name, db_path, detector_backend, distance_metric):
     for index in pbar:
         employee = employees[index]
         existing_df = pd.read_csv(r"df.csv")
+        #print(existing_df)
         existing_embeddings = existing_df["employee"]
-        if employee not in existing_embeddings:
+        #print(existing_embeddings.values)
+        if employee not in existing_embeddings.values:
+            #print(employee)
             pbar.set_description("Finding embedding for %s" % (employee.split("/")[-1]))
             embedding = []
 
@@ -185,9 +188,14 @@ def embed(model_name, db_path, detector_backend, distance_metric):
             embedding.append(img_representation)
             embeddings.append(embedding)
 
+
     df = pd.DataFrame(embeddings, columns=['employee', 'embedding'])
+    #print(df)
     df['distance_metric'] = distance_metric
-    df.to_csv(r'df.csv', index=False)
+    print(df)
+    existing_df = existing_df.append(df)
+    print(existing_df)
+    existing_df.to_csv(r'df.csv', index=False)
     # returns dataframe with employee, embedding and distance_metric information
     return df
 
