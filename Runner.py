@@ -190,11 +190,9 @@ def embed(model_name, db_path, detector_backend, distance_metric):
 
 
     df = pd.DataFrame(embeddings, columns=['employee', 'embedding'])
-    #print(df)
     df['distance_metric'] = distance_metric
-    print(df)
     existing_df = existing_df.append(df)
-    print(existing_df)
+  
     existing_df.to_csv(r'df.csv', index=False)
     # returns dataframe with employee, embedding and distance_metric information
     return df
