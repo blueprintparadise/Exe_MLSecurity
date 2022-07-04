@@ -11,17 +11,14 @@ import threading
 #  Fancy Progress Bars
 import cv2
 from tqdm import tqdm
-
 global offset
 offset = False
 import os
 import pandas as pd
 import threading
 import requests
-
 outputFrame = None
 import time
-
 lock = threading.Lock()
 # from flask_swagger_ui import get_swaggerui_blueprint
 # For certificate - converting "http" request to "https"
@@ -39,9 +36,9 @@ lock = threading.Lock()
 app = Flask(__name__)
 # app.register_blueprint(request_api.get_blueprint())
 # Initializing Necessary model for recognition/detection
+
 # Using "Facenet" and "Mediapipe" recommended
 model_name = 'Facenet'
-
 db_path = r"Face_Recog/images"
 detector_backend = 'mediapipe'
 ''' Options-'opencv',
@@ -55,98 +52,8 @@ detector_backend = 'mediapipe'
 distance_metric = 'cosine'
 input_shape = (224, 224)
 
-
-@app.route("/Facevideo", methods=['GET', 'POST'])
-def Facevideo():
-    # cam = cv2.VideoCapture(0)
-    #
-    # try:
-    #
-    #     # creating a folder named data
-    #     if not os.path.exists('data'):
-    #         os.makedirs('data')
-    #
-    # # if not created then raise error
-    # except OSError:
-    #     print('Error: Creating directory of data')
-    #
-    # # frame
-    # currentframe = 0
-    #
-    # while (True):
-    #
-    #     # reading from frame
-    #     ret, frame = cam.read()
-    #
-    #     if ret:
-    #         # if video is still left continue creating images
-    #         name = './data/frame' + str(currentframe) + '.jpg'
-    #         print('Creating...' + name)
-    #
-    #         # writing the extracted images
-    #         cv2.imwrite(name, frame)
-    #
-    #         # increasing counter so that it will
-    #         # show how many frames are created
-    #         currentframe += 1
-    #     else:
-    #         break
-    response = requests.Response()
-    print(response)
-    return "Runing"
-
-
 # Embedding Images to dataframe
-'''
-[1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi',
-1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi',
-1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Rushi', 1, 'Akshay', 1, 'Akshay', 1, 'Akshay', 1, 'Akshay', 1, 'Akshay', 1,
-'Rushi', 1, 'Rushi', 1, 'Akshay', 1, 'Rushi', 1, 'Rushi', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi',
-'Akshay', 2, 'Rushi', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 2, 'Rushi', 'Akshay', 3,
-'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay',
-'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi',
-'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3,
-'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi',
-'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay',
-2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2,
-'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi',
-'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3,
-'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay',
-'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 2, 'Rushi',
-'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Pranay', 'Akshay',
-2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Pranay', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2,
-'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi', 'Akshay', 2, 'Rushi',
-'Akshay', 2, 'Rushi', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay',
-'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Pranay', 'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Rushi',
-'Akshay', 'Akshay', 3, 'Rushi', 'Akshay', 'Akshay', 3, 'Pranay', 'Akshay', 'Akshay', 3, 'Pawan', 'Akshay', 'Akshay', 2,
-'Akshay', 'Akshay', 2, 'Akshay', 'Akshay', 2, 'Akshay', 'Akshay', 2, 'Akshay', 'Akshay', 3, 'Pawan', 'Akshay', 'Akshay',
-3, 'Akshay', 'Akshay', 'Akshay', 3, 'Pawan', 'Akshay', 'Akshay', 3]
-'''
 
-
-def notification_logic():
-    pass
-
-
-@app.route('/name', methods=["GET"])
-def get_name():
-    lst = []
-    string = ''
-    name = realtime.api_notification()
-    People_Count = [i for i in name if type(i) == int]
-    num_of_people = People_Count[-2]
-    num_of_people = num_of_people * 2
-    Names = [i for i in name if type(i) == str]
-    Names = Names[-num_of_people]
-    print(Names)
-
-    # final_x = int(final_x*2)
-    # final_x_2= final_x_2[-final_x]
-
-    return '01'
-
-
-@app.route('/embed', methods=["GET"])
 def embed(model_name, db_path, detector_backend, distance_metric):
     employees = []
     # check passed db folder exists
@@ -171,9 +78,7 @@ def embed(model_name, db_path, detector_backend, distance_metric):
     for index in pbar:
         employee = employees[index]
         existing_df = pd.read_csv(r"df.csv")
-        #print(existing_df)
         existing_embeddings = existing_df["employee"]
-        #print(existing_embeddings.values)
         if employee not in existing_embeddings.values:
             #print(employee)
             pbar.set_description("Finding embedding for %s" % (employee.split("/")[-1]))
@@ -192,19 +97,10 @@ def embed(model_name, db_path, detector_backend, distance_metric):
     df = pd.DataFrame(embeddings, columns=['employee', 'embedding'])
     df['distance_metric'] = distance_metric
     existing_df = existing_df.append(df)
-  
     existing_df.to_csv(r'df.csv', index=False)
     # returns dataframe with employee, embedding and distance_metric information
     return df
 
-
-@app.route('/retrn', methods=["GET"])
-def retrn():
-    emb = embed(model_name, db_path, detector_backend, distance_metric)
-    lst = ''
-    for i in emb['embedding']:
-        lst = str(lst) + str(i)
-    return lst
 
 
 @app.route("/")
