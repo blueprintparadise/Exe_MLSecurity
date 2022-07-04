@@ -170,20 +170,24 @@ def embed(model_name, db_path, detector_backend, distance_metric):
     # for employee in employees:
     for index in pbar:
         employee = employees[index]
-        pbar.set_description("Finding embedding for %s" % (employee.split("/")[-1]))
-        embedding = []
+        existing_df = pd.read_csv(r"df.csv")
+        existing_embeddings = existing_df["employee"]
+        if employee not in existing_embeddings:
+            pbar.set_description("Finding embedding for %s" % (employee.split("/")[-1]))
+            embedding = []
 
-        # preprocess_face returns single face. this is expected for source images in db.
-        img = functions.preprocess_face(img=employee, target_size=(input_shape_y, input_shape_x),
-                                        enforce_detection=False, detector_backend=detector_backend)
-        img_representation = model.predict(img)[0, :]
+            # preprocess_face returns single face. this is expected for source images in db.
+            img = functions.preprocess_face(img=employee, target_size=(input_shape_y, input_shape_x),
+                                            enforce_detection=False, detector_backend=detector_backend)
+            img_representation = model.predict(img)[0, :]
 
-        embedding.append(employee)
-        embedding.append(img_representation)
-        embeddings.append(embedding)
+            embedding.append(employee)
+            embedding.append(img_representation)
+            embeddings.append(embedding)
 
     df = pd.DataFrame(embeddings, columns=['employee', 'embedding'])
     df['distance_metric'] = distance_metric
+    df.to_csv(r'df.csv', index=False)
     # returns dataframe with employee, embedding and distance_metric information
     return df
 
